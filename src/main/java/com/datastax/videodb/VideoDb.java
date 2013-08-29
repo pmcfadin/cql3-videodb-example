@@ -2,11 +2,14 @@ package com.datastax.videodb;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.datastax.driver.core.utils.UUIDs;
 import com.datastax.videodb.dao.VideoDbBasicImpl;
 import com.datastax.videodb.object.Comment;
 import com.datastax.videodb.object.User;
@@ -26,7 +29,7 @@ public class VideoDb {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		ArrayList<String> cassandraNodes = new ArrayList<String>();
 		cassandraNodes.add(prop.getProperty("nodes"));
 
@@ -43,6 +46,12 @@ public class VideoDb {
 
 		System.out.println("Get user by using prepared statement: " + user);
 
+		// Add a new user
+		User newUser = new User("cdate","Chris","Date", "cdate@relational.com","6cb75f652a9b52798eb6cf2201057c73",Calendar.getInstance().getTime(),0,UUIDs.timeBased());
+		
+		vdb.setUserByPreparedStatement(newUser);
+		
+		
 		// Get a list of videos. This uses the simple Async Read feature.
 		List<Video> videosByTag = vdb.getVideosByTagUsingAsyncRead("lol");
 		for (Video video : videosByTag) {

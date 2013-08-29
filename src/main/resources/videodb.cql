@@ -83,11 +83,3 @@ CREATE TABLE video_event (
    PRIMARY KEY ((videoid,username), event_timestamp,event)
 ) WITH CLUSTERING ORDER BY (event_timestamp DESC,event ASC);
 
-// Credit transaction table
-CREATE TABLE credit_transaction (
-   username varchar,
-   type varchar,
-   datetime timestamp,
-   credits int,
-   PRIMARY KEY (username,datetime,type)
-) WITH CLUSTERING ORDER BY (datetime DESC, type ASC);

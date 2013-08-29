@@ -5,6 +5,25 @@ import java.util.UUID;
 
 public class User {
 
+	public User() {
+		super();
+
+	}
+
+	public User(String username, String firstname, String lastname,
+			String email, String password, Date created_date,
+			int total_credits, UUID credit_change_date) {
+		super();
+		this.username = username;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.created_date = created_date;
+		this.total_credits = total_credits;
+		this.credit_change_date = credit_change_date;
+	}
+
 	/**
 	 * @param args
 	 */
@@ -17,7 +36,7 @@ public class User {
 	private Date created_date;
 	private int total_credits;
 	private UUID credit_change_date;
-	
+
 	public String getUsername() {
 		return username;
 	}

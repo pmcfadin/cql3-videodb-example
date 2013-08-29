@@ -21,6 +21,8 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.policies.Policies;
+import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.driver.core.querybuilder.Batch;
 import com.datastax.videodb.object.Comment;
 import com.datastax.videodb.object.User;
@@ -38,6 +40,7 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 	private static final Object PRESENT = new Object();
 
 	private static final String GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = ?";
+	private static final String SET_USER = "INSERT INTO users (username, firstname, lastname, email, password, created_date) VALUES (?,?,?,?,?,?)";
 	private static final String GET_VIDEOS_BY_USERNAME = "SELECT videoid FROM username_video_index WHERE username = ?";
 	private static final String GET_VIDEO_BY_ID = "SELECT * FROM videos WHERE videoid = ?";
 	private static final String GET_VIDEOS_BY_TAG = "SELECT videoid FROM tag_index WHERE tag = ?";
@@ -51,6 +54,7 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 	private final Session session;
 
 	private final PreparedStatement getUserByNamePreparedStatement;
+	private final PreparedStatement setUser;
 	private final PreparedStatement getVideosByUsernamePreparedStatement;
 	private final PreparedStatement getVideoByIDPreparedStatement;
 	private final PreparedStatement getVideosByTagPreparedStatement;
@@ -70,11 +74,13 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 				.builder()
 				.addContactPoints(
 						contactPoints.toArray(new String[contactPoints.size()]))
+				.withRetryPolicy(Policies.defaultRetryPolicy())
 				.build();
 
 		session = cluster.connect(keyspace);
 
 		getUserByNamePreparedStatement = session.prepare(GET_USER_BY_USERNAME);
+		setUser = session.prepare(SET_USER);
 		getVideosByUsernamePreparedStatement = session
 				.prepare(GET_VIDEOS_BY_USERNAME);
 		getVideoByIDPreparedStatement = session.prepare(GET_VIDEO_BY_ID);
@@ -144,6 +150,40 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 		}
 
 		return user;
+
+	}
+
+	// Insert a User by prepared statment. Sets the following feilds.
+	// username, firstname, lastname, email, password, created_date
+	public void setUserByPreparedStatement(User user) {
+
+		BoundStatement bs = setUser.bind();
+		bs.setString("username", user.getUsername());
+		bs.setString("firstname", user.getFirstname());
+		bs.setString("lastname", user.getLastname());
+		bs.setString("email", user.getEmail());
+		bs.setString("password", user.getPassword());
+		bs.setDate("created_date", user.getCreated_date());
+
+		session.execute(bs);
+
+	}
+
+	// Insert a User by prepared statment. Sets the following feilds.
+	// username, firstname, lastname, email, password, created_date
+	public void setUserByUsingString(User user) {
+
+		StringBuffer userInsert = new StringBuffer(
+				"INSERT INTO users (username, firstname, lastname, email, password, created_date) VALUES (");
+		userInsert.append("'" + user.getUsername() + "'");
+		userInsert.append("'" + user.getFirstname() + "'");
+		userInsert.append("'" + user.getLastname() + "'");
+		userInsert.append("'" + user.getEmail() + "'");
+		userInsert.append("'" + user.getPassword() + "'");
+		userInsert.append("'" + user.getCreated_date().toString() + "'");
+		userInsert.append(")");
+
+		session.execute(userInsert.toString());
 
 	}
 
