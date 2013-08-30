@@ -6,17 +6,17 @@ This uses the [DataStax Java driver](https://github.com/datastax/java-driver) wi
 
 The following tables are created. You can use [this cql file](https://github.com/pmcfadin/cql3-videodb-example/blob/master/src/main/resources/videodb.cql) to import in your own database.
 
-users
-videos
+- users
+- videos
 
-username_video_index
-tag_index
-comments_by_video
-comments_by_user
+- username_video_index
+- tag_index
+- comments_by_video
+- comments_by_user
 
-video_rating
-video_event
-credit_transaction
+- video_rating
+- video_event
+- credit_transaction
 
 To insert data you will then need [this file](https://github.com/pmcfadin/cql3-videodb-example/blob/master/src/main/resources/videodb_dummy_data.cql) to build some sample content. 
 
