@@ -1,6 +1,6 @@
 #cql3-videodb-example
 
-This uses the DataStax Java driver with a full CQL3 application example
+This uses the [DataStax Java driver](https://github.com/datastax/java-driver) with a CQL3 application example.
 
 ##Data Model
 
@@ -25,19 +25,19 @@ To insert data you will then need [this file](https://github.com/pmcfadin/cql3-v
 
 The following methods are implemented. More to come as I get time.
 
-- *getUserByUsernameUsingString*
-- *getUserByUsernameUsingPreparedStatement*
-- getUserByUsernameUsingQueryBuilder
-- getVideoByIdUsingQueryBuilder
-- getVideosByUsernameUsingAsyncRead: Uses username_video_index to find all videos for a user. Performs a basic AsyncRead
-- getRatingForVideo: Selects counter values, does the math an returns the average
-- setRatingForVideo: Adds a rating to a video
-- getVideosByTagsUsingAsyncReadThreads: Uses username_video_index to find all videos for a user. Concurrent threads executing an AsyncRead
-- getVideosByTagUsingAsyncRead
-- setCommentForVideo: Set a comment. Demonstrate setting both tables with a batch.
-- getCommentsByUsernameUsingPreparedStatement: Grab a list of comments from a username perspective
-- getCommentsByVideoIdUsingPreparedStatement: Grab a list of comments from a Video ID perspective
-- getLastStopEvent: Query the video event table and find the last stop event for a video and user
-- addCreditForUser: Demonstrate how to simulate a transaction for adding a credit to a user account
-- removeCreditForUser: Now remove a credit using the same type of transaction type semantics
+- **getUserByUsernameUsingString**: Basic select using a full command string. 
+- **getUserByUsernameUsingPreparedStatement**: Example of prepared statement for same select. 
+- **getUserByUsernameUsingQueryBuilder**: Query builder for same select as string. 
+- **getVideoByIdUsingQueryBuilder**
+- **getVideosByUsernameUsingAsyncRead**: Uses username_video_index to find all videos for a user. Performs a basic AsyncRead
+- **getRatingForVideo**: Selects counter values, does the math an returns the average
+- **setRatingForVideo**: Adds a rating to a video. Uses counters.
+- **getVideosByTagsUsingAsyncReadThreads**: Uses username_video_index to find all videos for a user. Concurrent threads executing an AsyncRead
+- **getVideosByTagUsingAsyncRead**
+- **setCommentForVideo**: Set a comment. Demonstrate setting both tables with a batch.
+- **getCommentsByUsernameUsingPreparedStatement**: Grab a list of comments from a username perspective
+- **getCommentsByVideoIdUsingPreparedStatement**: Grab a list of comments from a Video ID perspective
+- **getLastStopEvent**: Query the video event table and find the last stop event for a video and user
+- **addCreditForUser**: Demonstrate how to simulate a transaction for adding a credit to a user account
+- **removeCreditForUser**: Now remove a credit using the same type of transaction type semantics
 
