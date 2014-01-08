@@ -30,13 +30,13 @@ INSERT INTO tag_index (tag, videoid, timestamp) VALUES ('piano',b3a76c6b-7c7f-4a
 INSERT INTO tag_index (tag, videoid, timestamp) VALUES ('lol',b3a76c6b-7c7f-4af6-964f-803a9283c401, '2012-05-25 08:30:29');
 
 // Video Rating counters
-UPDATE video_rating SET rating_counter = rating_counter + 3, rating_total = rating_total + 1 
+UPDATE video_rating SET rating_counter = rating_counter + 1, rating_total = rating_total + 3 
 WHERE videoid = 99051fe9-6a9c-46c2-b949-38ef78858dd0;
 
-UPDATE video_rating SET rating_counter = rating_counter + 5, rating_total = rating_total + 1 
+UPDATE video_rating SET rating_counter = rating_counter + 1, rating_total = rating_total + 5
 WHERE videoid = 99051fe9-6a9c-46c2-b949-38ef78858dd0;
 
-UPDATE video_rating SET rating_counter = rating_counter + 4, rating_total = rating_total + 1 
+UPDATE video_rating SET rating_counter = rating_counter + 1, rating_total = rating_total + 4
 WHERE videoid = 99051fe9-6a9c-46c2-b949-38ef78858dd0;
 
 // Insert in pairs

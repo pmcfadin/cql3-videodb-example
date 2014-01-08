@@ -16,13 +16,11 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Query;
-import com.datastax.driver.core.QueryTrace;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.policies.Policies;
-import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.driver.core.querybuilder.Batch;
 import com.datastax.videodb.object.Comment;
 import com.datastax.videodb.object.User;
@@ -104,7 +102,11 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 		cluster.shutdown();
 	}
 
-	// Least secure method of executing CQL but here as an example.
+	/**
+	 * Least secure method of executing CQL but here as an example.
+	 * @param username
+	 * @return the user
+	 */
 	public User getUserByUsernameUsingString(String username) {
 
 		User user = new User();
@@ -126,7 +128,11 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 	}
 
-	// Simple example using a Prepared Statement
+	/**
+	 * Simple example using a Prepared Statement.
+	 * @param username
+	 * @return the user
+	 */
 	public User getUserByUsernameUsingPreparedStatement(String username) {
 
 		User user = new User();
@@ -145,7 +151,7 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 			user.setFirstname(row.getString("firstname"));
 			user.setLastname(row.getString("lastname"));
 			user.setEmail(row.getString("email"));
-			user.setPassword(row.getString("Password"));
+			user.setPassword(row.getString("password"));
 			user.setCreated_date(row.getDate("created_date"));
 		}
 
@@ -153,8 +159,11 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 	}
 
-	// Insert a User by prepared statment. Sets the following feilds.
-	// username, firstname, lastname, email, password, created_date
+	/**
+	 * Inserts a User by prepared statement. Sets the following fields:
+	 * username, firstname, lastname, email, password, created_date
+	 * @param user
+	 */
 	public void setUserByPreparedStatement(User user) {
 
 		BoundStatement bs = setUser.bind();
@@ -169,8 +178,11 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 	}
 
-	// Insert a User by prepared statment. Sets the following feilds.
-	// username, firstname, lastname, email, password, created_date
+	/**
+	 * Inserts a User by prepared statement. Sets the following fields:
+	 * username, firstname, lastname, email, password, created_date
+	 * @param user
+	 */
 	public void setUserByUsingString(User user) {
 
 		StringBuffer userInsert = new StringBuffer(
@@ -187,8 +199,12 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 	}
 
-	// Using Query Builder is the most secure way of creating a CQL query.
-	// Avoids issues with injection style attacks.
+	/**
+	 * Using QueryBuilder is the most secure way of creating a CQL query.
+	 * Avoids issues with injection style attacks.
+	 * @param videoId
+	 * @return
+	 */
 	public Video getVideoByIdUsingQueryBuilder(String videoId) {
 
 		Video video = new Video();
@@ -224,11 +240,15 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 	}
 
-	// A powerful and efficient way of reading data from your cluster. When you
-	// need more than one row, consider using an AsyncRead with a
-	// ResultSetFuture
-	// Each query is done in parallel and is non-blocking until you issue the
-	// get.
+	/**
+	 * A powerful and efficient way of reading data from your cluster. When you
+	 * need more than one row, consider using an AsyncRead with a
+	 * ResultSetFuture
+	 * Each query is done in parallel and is non-blocking until you issue the get.
+
+	 * @param username
+	 * @return
+	 */
 	public List<Video> getVideosByUsernameUsingAsyncRead(String username) {
 
 		// Get a list of videoIds for one user from username
@@ -270,11 +290,13 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 		return videos;
 	}
 
-	// This is a bit more of a complicated example using AsyncRead and threads.
-	// The
-	// threads are used to background a query and notify when complete. After
-	// all
-	// queries are run, we use a latch wait for the last result to be returned.
+	/**
+	 * This is a bit more of a complicated example using AsyncRead and threads.
+	 * The threads are used to background a query and notify when complete. After
+	 * all queries are run, we use a latch wait for the last result to be returned.
+	 * @param tags
+	 * @return
+	 */
 	public List<Video> getVideosByTagsUsingAsyncReadThreads(List<String> tags) {
 
 		List<Video> videos = new ArrayList<Video>();
@@ -384,11 +406,14 @@ public class VideoDbBasicImpl implements VideoDbDAO {
 
 		Row row = rs.one();
 
+		if ( row == null ) {
+			return 0;
+		}
 		// Get the count and total rating for the video
 		long total = row.getLong("rating_total");
 		long count = row.getLong("rating_counter");
 
-		// Divide the total byt the count and return an average
+		// Divide the total by the count and return an average
 		return (total / count);
 	}
 
